@@ -1,3 +1,4 @@
+
 # FinTech Payment Evolution - Documentation Index
 
 ## 📋 Overview
@@ -13,6 +14,16 @@ This repository contains enterprise-grade cross-border payment architecture docu
 | [Level 0 Cross-Border Architecture](level0-cross-border-architecture.md) | High-level system architecture for cross-border payments | ✅ Complete |
 | [Cross-Border Payment Sequence Diagram](sequence-diagrams/cross-border-payment-level0.md) | Detailed 5-stage, 14-step payment lifecycle with BIAN mapping | ✅ Complete |
 | [Remittances Use-Case 1a Summary](remittances-use-case-1a-summary.md) | PMPG Use-Case 1a implementation guide (Account to Account) | ✅ Complete |
+
+### ☁️ Cloud Infrastructure Implementation
+
+| Platform | Documentation | Status |
+|----------|---------------|---------|
+| **Azure** | [Azure Cross-Border Payment Architecture](../cloud-infrastructure/azure/docs/azure-cross-border-payment-architecture.md) | ✅ Complete |
+| **Azure** | [Azure Bicep Templates](../cloud-infrastructure/azure/templates/) | ✅ Complete |
+| **Azure** | [Azure Deployment Scripts](../cloud-infrastructure/azure/scripts/) | ✅ Complete |
+| **AWS** | AWS Implementation (Planned) | 🚧 Future |
+| **GCP** | GCP Implementation (Planned) | 🚧 Future |
 
 ### 📊 Sequence Diagrams Collection
 
@@ -153,3 +164,4 @@ All documentation follows:
 
 *Last Updated: September 18, 2025*  
 *Repository: [FinTech_Payment_Evolution](https://github.com/calvinlee999/FinTech_Payment_Evolution)*
+>>>>>>> fintech-payment/main
