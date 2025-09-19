@@ -48,11 +48,11 @@ graph TB
         D4[Status Updates]
     end
 
-    subgraph "📊 Stage 5: Integration & Analytics"
-        E1[Operational Data Store]
-        E2[Data Lake Analytics]
-        E3[Customer Notifications]
-        E4[Compliance Reporting]
+    subgraph "📊 Stage 5: Payment Integration & Data Platform"
+        E1[Medallion Data Architecture]
+        E2[Bronze: Raw Data Ingestion]
+        E3[Silver: Cleaned & Validated Data]
+        E4[Gold: Business Intelligence]
     end
 
     A1 --> A2 --> A3 --> A4
@@ -83,21 +83,21 @@ graph TB
 
 ## 🏛️ Enterprise 5-Stage Payment Lifecycle
 
-### Stage 1: Payment Initiation (Bronze Layer)
+### Stage 1: Payment Initiation
 
 - **Client Experience**: Web/mobile payment initiation
 - **UETR Generation**: Unique transaction reference creation
 - **Fee Transparency**: Real-time FX rate calculation and fee breakdown
 - **Data Validation**: Structured party data collection and validation
 
-### Stage 2: Payment Approval (Silver Layer)
+### Stage 2: Payment Approval
 
 - **Dual Approval**: Maker-Checker workflow implementation
 - **Compliance Screening**: Enhanced AML/OFAC screening for P2P patterns
 - **Risk Assessment**: ML-based fraud detection algorithms
 - **Audit Logging**: Complete compliance audit trail
 
-### Stage 3: Payment Gateway (Silver Layer)
+### Stage 3: Payment Gateway
 
 - **Message Formatting**: MT/MX message conversion with schema validation
 - **SWIFT Integration**: Secure network transmission with encryption
@@ -111,12 +111,151 @@ graph TB
 - **Status Management**: Automated retry logic and status reconciliation
 - **Network Optimization**: Intelligent routing and latency optimization
 
-### Stage 5: Payment Integration (Gold Layer)
+### Stage 5: Payment Integration & Data Platform (Medallion Architecture)
 
-- **Data Platform**: Operational Data Store and analytics integration
-- **Customer Communication**: Real-time status updates and notifications
-- **Business Intelligence**: Payment analytics and trend analysis
-- **Reconciliation**: Automated settlement matching and exception handling
+**Comprehensive Medallion Data Architecture for Payment Data Processing**
+
+#### 🥉 Bronze Layer - Raw Data Ingestion
+- **Real-time Payment Streams**: Kafka-based ingestion from all payment stages
+- **SWIFT Message Capture**: Complete MT/MX message logging and archival
+- **Transaction State Events**: Every payment lifecycle state change captured
+- **External Data Sources**: FX rates, compliance feeds, correspondent bank data
+- **Data Formats**: Raw JSON, XML, binary SWIFT formats preserved
+
+#### 🥈 Silver Layer - Cleaned & Validated Data
+- **Data Cleansing**: Standardized payment data with validation rules
+- **Schema Harmonization**: Unified payment data models across sources
+- **Enrichment**: Enhanced with reference data (BIC codes, country codes, currency rates)
+- **Deduplication**: Intelligent handling of duplicate transactions and retries
+- **Quality Scoring**: Data quality metrics and validation flags
+
+#### 🥇 Gold Layer - Business Intelligence & Analytics
+- **Payment Analytics**: Transaction volumes, success rates, processing times
+- **Compliance Reporting**: AML/OFAC analysis, regulatory reporting datasets
+- **Customer Insights**: Payment patterns, corridor analysis, fee optimization
+- **Operational Dashboards**: Real-time monitoring and alerting
+- **Predictive Models**: Fraud detection, liquidity forecasting, risk analytics
+
+## 🏗️ Azure Medallion Data Architecture Options
+
+### **Priority 1: Confluent + Snowflake on Azure**
+
+```mermaid
+graph TB
+    subgraph "🥉 Bronze Layer - Event Streaming (Azure)"
+        A1[Confluent Cloud on Azure] --> A2[Schema Registry]
+        A3[SWIFT Message Streams] --> A1
+        A4[Payment Event Streams] --> A1
+        A5[Azure API Management] --> A1
+        A2 --> A6[Snowpipe Auto-Ingestion]
+        A6 --> A7[Snowflake on Azure]
+    end
+    
+    subgraph "🥈 Silver Layer - Data Engineering"
+        B1[Snowflake Data Warehouse] --> B2[dbt Cloud Transformations]
+        B3[Azure Data Factory] --> B1
+        A7 --> B1
+        B2 --> B4[Payment Data Models]
+    end
+    
+    subgraph "🥇 Gold Layer - Analytics & Intelligence"
+        C1[Snowflake Cortex AI] 
+        C2[Power BI Premium]
+        C3[Azure ML Integration]
+        C4[Payment Risk Models]
+        B4 --> C1 --> C4
+        B4 --> C2
+        C1 --> C3
+    end
+```
+
+**Azure Integration Benefits:**
+- **Azure Private Link**: Secure connectivity between Confluent, Snowflake, and Azure services
+- **Azure AD SSO**: Unified authentication across all platforms
+- **Azure Monitor**: Comprehensive observability for payment data pipelines
+- **Compliance**: Azure compliance certifications align with payment regulations
+
+**Payment-Specific Features:**
+- **Real-time SWIFT Processing**: Confluent handles high-throughput SWIFT messages
+- **UETR Tracking**: Native support for transaction reference tracking
+- **ISO 20022 Schema**: Schema Registry manages payment message evolution
+- **Fraud Detection**: Snowflake Cortex AI for real-time payment anomaly detection
+
+### **Priority 2: Azure-Native Medallion Architecture**
+
+```mermaid
+graph TB
+    subgraph "🥉 Bronze Layer - Azure Data Ingestion"
+        D1[Azure Event Hubs] --> D2[Azure Data Lake Gen2]
+        D3[SWIFT Connector] --> D1
+        D4[Azure API Management] --> D1
+        D5[Azure Service Bus] --> D1
+        D6[Payment APIs] --> D4
+    end
+    
+    subgraph "🥈 Silver Layer - Azure Data Processing" 
+        E1[Azure Databricks] --> E2[Delta Lake Tables]
+        E3[Azure Data Factory] --> E1
+        E4[Azure Synapse Pipelines] --> E1
+        D2 --> E3
+        D2 --> E4
+    end
+    
+    subgraph "🥇 Gold Layer - Azure Analytics"
+        F1[Azure Synapse Analytics] 
+        F2[Power BI Premium]
+        F3[Azure ML Services]
+        F4[Azure Cognitive Services]
+        E2 --> F1 --> F2
+        E2 --> F3 --> F4
+    end
+```
+
+**Azure-Native Advantages:**
+- **Unified Security**: Azure AD, Key Vault, and Security Center integration
+- **Cost Optimization**: Azure Reserved Instances and committed use discounts
+- **Enterprise Integration**: Native Office 365 and Teams integration
+- **Regulatory Compliance**: Built-in compliance for financial services
+
+**Payment Processing Features:**
+- **High Availability**: 99.9% SLA with Azure availability zones
+- **Auto-scaling**: Event Hubs and Databricks scale with payment volume
+- **Real-time Analytics**: Stream Analytics for immediate payment insights
+- **Advanced ML**: Azure ML for sophisticated payment fraud models
+
+## 🎯 **Azure Architecture Comparison**
+
+| Feature | Confluent + Snowflake | Azure-Native |
+|---------|----------------------|---------------|
+| **Streaming Performance** | ⭐⭐⭐⭐⭐ (Confluent) | ⭐⭐⭐⭐ (Event Hubs) |
+| **SWIFT Integration** | ⭐⭐⭐⭐⭐ (Native Kafka) | ⭐⭐⭐⭐ (Custom Connectors) |
+| **Analytics Performance** | ⭐⭐⭐⭐⭐ (Snowflake) | ⭐⭐⭐⭐ (Synapse) |
+| **Cost Predictability** | ⭐⭐⭐ (Multi-vendor) | ⭐⭐⭐⭐⭐ (Single bill) |
+| **Time to Market** | ⭐⭐⭐⭐⭐ (Managed) | ⭐⭐⭐ (More setup) |
+| **Azure Integration** | ⭐⭐⭐⭐ (Hybrid) | ⭐⭐⭐⭐⭐ (Native) |
+| **Vendor Lock-in** | ⭐⭐⭐⭐ (Multi-cloud) | ⭐⭐ (Azure-specific) |
+
+## 💡 **Recommended Implementation Sequence**
+
+### **Phase 1: Confluent + Snowflake Foundation** (Months 1-3)
+1. **Setup Confluent Cloud** on Azure with payment message topics
+2. **Deploy Snowflake** on Azure with medallion layer structure  
+3. **Implement SWIFT connectors** for real-time message ingestion
+4. **Build basic dbt models** for payment data transformation
+5. **Create Power BI dashboards** for payment monitoring
+
+### **Phase 2: Advanced Analytics** (Months 4-6)  
+1. **Implement Snowflake Cortex AI** for fraud detection
+2. **Add Azure ML integration** for custom payment models
+3. **Build real-time alerting** for payment anomalies
+4. **Create compliance reporting** automated pipelines
+5. **Optimize performance** and cost management
+
+### **Phase 3: Future Evolution** (Months 7+)
+1. **Evaluate Azure-Native migration** for cost optimization
+2. **Consider Databricks Lakehouse** for advanced ML workloads
+3. **Implement multi-region** deployment for global payments
+4. **Add advanced governance** with Azure Purview integration
 
 ## 📚 Documentation
 
