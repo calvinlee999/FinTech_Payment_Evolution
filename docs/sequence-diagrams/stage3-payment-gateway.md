@@ -1,4 +1,4 @@
-# Stage 3: Payment Gateway
+# Stage 3: Payment Gateway + UETR Message Embedding
 ## Detailed Process Flow - Message Formatting and SWIFT Transmission
 
 ```mermaid
@@ -11,33 +11,34 @@ sequenceDiagram
     participant DataLake as 🏛️ Data Lake (Silver/Gold)
     participant KafkaEvents as 📨 Kafka Events
 
-    Note over WorkflowEngine, KafkaEvents: 🌐 STAGE 3: PAYMENT GATEWAY (Target: Payment Accuracy & Sender Clarity)
+    Note over WorkflowEngine, KafkaEvents: 🌐 STAGE 3: PAYMENT GATEWAY + UETR MESSAGE EMBEDDING
+    Note right of KafkaEvents: UETR embedded in all ISO 20022/MT messages
 
-    %% Process Step 1: Message Formatting
+    %% Process Step 1: Message Formatting with UETR
     activate WorkflowEngine
-    WorkflowEngine->>PaymentFormatter: Format Payment Message
+    WorkflowEngine->>PaymentFormatter: Format Payment Message (UETR included)
     activate PaymentFormatter
-    PaymentFormatter->>PaymentFormatter: Select Message Type
-    Note right of PaymentFormatter: ISO 20022 Priority:<br/>• pacs.008 (FI Credit Transfer)<br/>• MT103 (Single Customer Transfer)<br/>• pacs.009 (Financial Institution Transfer)
+    PaymentFormatter->>PaymentFormatter: Select Message Type (UETR preserved)
+    Note right of PaymentFormatter: UETR Message Priority:<br/>• pacs.008 (FI Credit Transfer)<br/>• MT103 (Single Customer Transfer)<br/>• pacs.009 (Financial Institution Transfer)<br/>• UETR embedded in TxId field
 
-    %% Process Step 2: ISO 20022 Message Assembly
-    PaymentFormatter->>PaymentFormatter: Assemble ISO 20022 Message
-    Note right of PaymentFormatter: Key Message Elements:<br/>• UETR (End-to-End Reference)<br/>• Structured Address Data<br/>• Category Purpose (GP2P)<br/>• Regulatory Information<br/>• Fee Details
+    %% Process Step 2: ISO 20022 Message Assembly with UETR
+    PaymentFormatter->>PaymentFormatter: Assemble ISO 20022 Message (UETR embedded)
+    Note right of PaymentFormatter: UETR Message Elements:<br/>• UETR (End-to-End Reference)<br/>• Structured Address Data<br/>• Category Purpose (GP2P)<br/>• Regulatory Information<br/>• Fee Details with UETR tracking
 
-    %% Process Step 3: Message Validation
-    PaymentFormatter->>ValidationSvc: Validate Message Format
+    %% Process Step 3: Message Validation with UETR
+    PaymentFormatter->>ValidationSvc: Validate Message Format (UETR included)
     activate ValidationSvc
-    ValidationSvc->>ValidationSvc: Schema Validation (XML/JSON)
-    ValidationSvc->>ValidationSvc: Business Rule Validation
-    Note right of ValidationSvc: Validation Checks:<br/>• Field presence & format<br/>• Country-specific rules<br/>• Currency restrictions<br/>• Amount limits
-    ValidationSvc-->>PaymentFormatter: Validation Result
+    ValidationSvc->>ValidationSvc: Schema Validation (XML/JSON + UETR)
+    ValidationSvc->>ValidationSvc: Business Rule Validation (UETR compliance)
+    Note right of ValidationSvc: UETR Validation Checks:<br/>• Field presence & format<br/>• Country-specific rules<br/>• Currency restrictions<br/>• Amount limits<br/>• UETR integrity
+    ValidationSvc-->>PaymentFormatter: Validation Result (UETR verified)
     deactivate ValidationSvc
 
-    %% Process Step 4: Core Banking Integration
-    PaymentFormatter->>CoreBanking: Check Account Balance & Authorizations
+    %% Process Step 4: Core Banking Integration with UETR
+    PaymentFormatter->>CoreBanking: Check Account Balance & Authorizations (UETR tracked)
     activate CoreBanking
-    CoreBanking->>CoreBanking: Validate Nostro Account
-    CoreBanking->>CoreBanking: Check Available Balance
+    CoreBanking->>CoreBanking: Validate Nostro Account (UETR logged)
+    CoreBanking->>CoreBanking: Check Available Balance (UETR reference)
     CoreBanking-->>PaymentFormatter: Account Validation Confirmed
     Note left of CoreBanking: ✅ TARGET ACHIEVED:<br/>Payment Accuracy
     deactivate CoreBanking

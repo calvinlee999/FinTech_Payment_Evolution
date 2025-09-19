@@ -1,4 +1,4 @@
-# Stage 5: Payment Integration
+# Stage 5: Payment Integration + UETR Analytics Platform
 ## Detailed Process Flow - Data Integration and Customer Notifications
 
 ```mermaid
@@ -12,32 +12,33 @@ sequenceDiagram
     participant Customer as 👤 Customer
     participant KafkaEvents as 📨 Kafka Events
 
-    Note over gpiTracker, Customer: 📈 STAGE 5: PAYMENT INTEGRATION (Target: Completion Alert & Investigation Reduction)
+    Note over gpiTracker, Customer: 📈 STAGE 5: PAYMENT INTEGRATION + UETR ANALYTICS PLATFORM
+    Note right of Customer: UETR enables customer self-service and business analytics
 
-    %% Process Step 1: Final Status Integration
+    %% Process Step 1: Final Status Integration with UETR
     activate gpiTracker
-    gpiTracker->>DataLake: Final Settlement Status
+    gpiTracker->>DataLake: Final Settlement Status (UETR completed)
     activate DataLake
-    DataLake->>DataLake: Update Operational Data Store (ODS)
-    Note right of DataLake: Gold Layer Completion:<br/>• End-to-end transaction record<br/>• Performance metrics captured<br/>• Compliance audit trail<br/>• Cost and timing analytics
+    DataLake->>DataLake: Update Operational Data Store (UETR as primary key)
+    Note right of DataLake: UETR Gold Layer Completion:<br/>• End-to-end transaction record<br/>• Performance metrics captured<br/>• Compliance audit trail<br/>• Cost and timing analytics<br/>• UETR-based retrieval optimization
 
-    %% Process Step 2: Analytics Dashboard Update
-    DataLake->>AnalyticsDashboard: Real-time Dashboard Update
+    %% Process Step 2: Analytics Dashboard Update with UETR
+    DataLake->>AnalyticsDashboard: Real-time Dashboard Update (UETR metrics)
     activate AnalyticsDashboard
-    AnalyticsDashboard->>AnalyticsDashboard: Update Operational Metrics
-    Note right of AnalyticsDashboard: Real-time KPIs:<br/>• Transaction success rates<br/>• Average processing times<br/>• Cost per transaction<br/>• Customer satisfaction scores
+    AnalyticsDashboard->>AnalyticsDashboard: Update Operational Metrics (UETR-indexed)
+    Note right of AnalyticsDashboard: UETR Real-time KPIs:<br/>• Transaction success rates by UETR<br/>• Average processing times<br/>• Cost per transaction<br/>• Customer satisfaction scores<br/>• UETR lookup performance
     deactivate AnalyticsDashboard
 
-    %% Process Step 3: Completion Notification Generation
-    DataLake->>NotificationSvc: Trigger Completion Notification
+    %% Process Step 3: Completion Notification Generation with UETR
+    DataLake->>NotificationSvc: Trigger Completion Notification (UETR reference)
     activate NotificationSvc
-    NotificationSvc->>NotificationSvc: Generate Multi-channel Alerts
-    Note right of NotificationSvc: Notification Channels:<br/>• Email confirmation<br/>• SMS alerts<br/>• Mobile app notifications<br/>• API webhooks
+    NotificationSvc->>NotificationSvc: Generate Multi-channel Alerts (UETR included)
+    Note right of NotificationSvc: UETR Notification Channels:<br/>• Email confirmation (UETR ref)<br/>• SMS alerts (UETR tracking)<br/>• Mobile app notifications<br/>• API webhooks (UETR status)
 
-    %% Process Step 4: Customer Portal Update
-    NotificationSvc->>CustomerPortal: Update Transaction Status
+    %% Process Step 4: Customer Portal Update with UETR
+    NotificationSvc->>CustomerPortal: Update Transaction Status (UETR key)
     activate CustomerPortal
-    CustomerPortal->>CustomerPortal: Update Customer View
+    CustomerPortal->>CustomerPortal: Update Customer View (UETR self-service)
     Note right of CustomerPortal: Customer Experience:<br/>• Real-time status updates<br/>• Transaction history<br/>• Downloadable receipts<br/>• Issue tracking
 
     %% Process Step 5: Customer Notification Delivery

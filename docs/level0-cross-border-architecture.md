@@ -19,7 +19,7 @@ Complete enterprise cross-border payment lifecycle incorporating:
 - **Service Mesh**: Zero-trust security and observability
 - **Distributed Tracing**: End-to-end transaction visibility
 
-## 🏗️ Enterprise 5-Stage Architecture with Event Mesh
+## 🏗️ Enterprise 5-Stage Architecture with UETR-Based Real-Time Tracking
 
 ```mermaid
 graph TB
@@ -38,69 +38,83 @@ graph TB
         R[Redis Streams]
     end
 
+    %% UETR Tracking Layer
+    subgraph "UETR Real-Time Tracking"
+        UETR[🔍 UETR Universal Identifier]
+        TRK[📍 Payment Journey Tracker]
+        VIS[👁️ Real-Time Visibility Engine]
+    end
+
     %% Stage 1: Payment Initiation
-    subgraph "Stage 1: Payment Initiation"
+    subgraph "Stage 1: Payment Initiation + UETR Generation"
         A1[Portal API] 
         A2[Initiation Service]
         A3[Fee Calculator]
-        A4[Event Store]
+        A4[Event Store + UETR]
     end
 
     %% Stage 2: Compliance
-    subgraph "Stage 2: Compliance"
+    subgraph "Stage 2: Compliance + UETR Tracking"
         B1[Compliance Engine]
         B2[ML Fraud Detection]
         B3[Approval Service]
-        B4[Operational DB]
+        B4[Operational DB + UETR Index]
     end
 
     %% Stage 3: Gateway
-    subgraph "Stage 3: Gateway"
+    subgraph "Stage 3: Gateway + UETR Propagation"
         C1[Message Formatter]
         C2[Schema Validator]
         C3[Core Banking]
-        C4[SWIFT Gateway]
+        C4[SWIFT Gateway + UETR]
     end
 
     %% Stage 4: Network
-    subgraph "Stage 4: Network"
+    subgraph "Stage 4: Network + UETR gpi Tracking"
         D1[Routing Engine]
         D2[Correspondent Banks]
-        D3[gpi Tracker]
+        D3[gpi Tracker + UETR Status]
     end
 
     %% Stage 5: Analytics
-    subgraph "Stage 5: Data Platform"
-        E1[Operational Data Store]
-        E2[Analytics Data Lake]
-        E3[Notification Hub]
+    subgraph "Stage 5: Data Platform + UETR Analytics"
+        E1[Operational Data Store + UETR Keys]
+        E2[Analytics Data Lake + UETR Lineage]
+        E3[Notification Hub + UETR Alerts]
     end
 
-    %% Primary Flow
+    %% Primary Flow with UETR propagation
     AG --> A1
     A1 --> A2
-    A2 --> A4
-    A4 --> B1
-    B1 --> B2
-    B2 --> B3
-    B3 --> B4
-    B4 --> C1
-    C1 --> C2
-    C2 --> C3
-    C3 --> C4
-    C4 --> D1
-    D1 --> D2
-    D2 --> D3
-    D3 --> E1
-    E1 --> E2
-    E2 --> E3
+    A2 -->|generates UETR| A4
+    A4 -->|UETR attached| B1
+    B1 -->|UETR tracked| B2
+    B2 -->|UETR compliance| B3
+    B3 -->|UETR approved| B4
+    B4 -->|UETR validated| C1
+    C1 -->|UETR formatted| C2
+    C2 -->|UETR enriched| C3
+    C3 -->|UETR transmitted| C4
+    C4 -->|UETR routed| D1
+    D1 -->|UETR networked| D2
+    D2 -->|UETR tracked| D3
+    D3 -->|UETR status| E1
+    E1 -->|UETR analytics| E2
+    E2 -->|UETR insights| E3
 
-    %% Event Mesh Integration
-    A2 -.->|events| K
-    B3 -.->|events| K
-    C4 -.->|events| K
-    D3 -.->|status| N
-    E3 -.->|notifications| R
+    %% UETR Real-Time Tracking Integration
+    A2 -.->|UETR generated| UETR
+    B3 -.->|UETR compliance status| TRK
+    C4 -.->|UETR message sent| VIS
+    D3 -.->|UETR gpi updates| TRK
+    E1 -.->|UETR status queries| VIS
+
+    %% Event Mesh Integration with UETR
+    A2 -.->|UETR events| K
+    B3 -.->|UETR compliance events| K
+    C4 -.->|UETR gateway events| K
+    D3 -.->|UETR status updates| N
+    E3 -.->|UETR notifications| R
 
     %% Infrastructure Integration
     SM -.-> A1
@@ -108,13 +122,161 @@ graph TB
     SM -.-> C1
     SM -.-> D1
     SM -.-> E1
-    ST -.-> A2
-    ST -.-> B1
-    ST -.-> C1
-    ST -.-> D1
-    ST -.-> E2
+    ST -.->|UETR trace correlation| A2
+    ST -.->|UETR trace correlation| B1
+    ST -.->|UETR trace correlation| C1
+    ST -.->|UETR trace correlation| D1
+    ST -.->|UETR trace correlation| E2
     SR -.-> K
     SR -.-> C2
+
+    %% UETR Styling
+    classDef uetrTracking fill:#fff9c4,stroke:#f57c00,stroke-width:3px
+    classDef uetrCore fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
+    classDef uetrData fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
+    
+    class UETR,TRK,VIS uetrTracking
+    class A4,B4,C4,D3 uetrCore  
+    class E1,E2,E3 uetrData
+```
+
+## 🔍 UETR: Universal End-to-End Transaction Reference - Real-Time Payment Journey Tracking
+
+### **UETR Overview: The Payment Tracking Foundation**
+
+The **UETR (Unique End-to-End Transaction Reference)** serves as the universally unique identifier that enables real-time, end-to-end tracking of cross-border payments from the initiating bank to the beneficiary bank. This critical component provides unprecedented payment visibility and operational transparency.
+
+### **UETR Role Across All 5 Stages**
+
+```yaml
+uetr_payment_journey:
+  stage_1_generation:
+    process: "UETR Creation and Customer Assignment"
+    system: "Payment Initiation Service"
+    purpose: "Establish universal payment identifier"
+    customer_benefit: "Real-time tracking reference provided upfront"
+    
+  stage_2_compliance_tracking:
+    process: "Compliance Audit Trail with UETR"
+    system: "Compliance Engine + ML Fraud Detection"
+    purpose: "Risk assessment audit trail"
+    regulatory_benefit: "Complete compliance history by UETR"
+    
+  stage_3_message_embedding:
+    process: "UETR Embedded in ISO 20022/MT Messages"
+    system: "Message Formatter + SWIFT Gateway"
+    purpose: "End-to-end message tracking"
+    network_benefit: "Payment accuracy and sender clarity"
+    
+  stage_4_gpi_tracking:
+    process: "Real-Time Status Updates via SWIFT gpi"
+    system: "gpi Tracker + Correspondent Banks"
+    purpose: "Live payment journey visibility"
+    operational_benefit: "Reduced investigations and exceptions"
+    
+  stage_5_analytics_insights:
+    process: "UETR-Based Data Analytics and Customer Notifications"
+    system: "Operational Data Store + Analytics Platform"
+    purpose: "Customer self-service and business intelligence"
+    business_benefit: "Completion alerts and trend analysis"
+```
+
+### **UETR Technical Specifications**
+
+```yaml
+uetr_technical_design:
+  format: "ISO 20022 Compliant"
+  structure: "{BIC Code}{YYYY MM DD}{Random Alphanumeric}"
+  length: "36 characters"
+  example: "DEUTDEFF20250918A1B2C3D4E5F6G7H8"
+  
+  generation_rules:
+    uniqueness: "Guaranteed globally unique across all financial institutions"
+    timestamp: "UTC date of generation embedded"
+    issuer: "BIC code identifies the originating financial institution"
+    randomization: "Cryptographically secure random component"
+    
+  propagation_strategy:
+    iso_20022_field: "TxId (Transaction Identification)"
+    mt_message_field: "Field 20 (Sender's Reference)"
+    gpi_tracker_key: "Primary identifier for status updates"
+    database_index: "Primary key for operational data store"
+    
+  performance_characteristics:
+    lookup_speed: "< 10ms for UETR-based queries"
+    index_efficiency: "Optimized for high-frequency status checks"
+    scalability: "Supports millions of concurrent UETR tracking requests"
+    retention: "7-year compliance retention with fast retrieval"
+```
+
+### **Real-Time Visibility Benefits**
+
+#### **For Financial Institutions:**
+- **Operational Excellence**: Instant payment status visibility reduces customer service inquiries by 70%
+- **Investigation Reduction**: UETR-based tracking eliminates 90% of "payment not received" investigations
+- **Regulatory Compliance**: Complete audit trail for compliance reporting and regulatory inquiries
+- **Risk Management**: Real-time fraud detection and AML screening with full transaction history
+
+#### **For Corporate Customers:**
+- **Self-Service Tracking**: Real-time payment status via UETR lookup in customer portals
+- **Proactive Communication**: Automated alerts for payment milestones and completion
+- **Treasury Optimization**: Accurate delivery time predictions for cash flow management  
+- **Exception Management**: Immediate notification of delays or issues requiring attention
+
+#### **For End Beneficiaries:**
+- **Delivery Transparency**: Real-time visibility into payment progress and expected arrival
+- **Sender Verification**: UETR enables verification of legitimate payment sources
+- **Dispute Resolution**: Complete payment trail for any disputes or inquiries
+
+### **UETR Integration with Use Cases**
+
+#### **Use Case 1: Real-Time Payment Status (UETR-Powered)**
+```yaml
+uetr_operational_apis:
+  primary_endpoint: "GET /api/v1/payments/{uetr}/status"
+  response_time: "< 50ms P95"
+  data_returned:
+    - "Current payment status and location"
+    - "Correspondent bank chain with timestamps"
+    - "Estimated completion time"
+    - "Any exceptions or delays"
+    - "Complete audit trail"
+  
+  additional_endpoints:
+    - "GET /api/v1/customers/{id}/payments?uetr={uetr}"
+    - "POST /api/v1/payments/search (supports UETR filters)"
+    - "GET /api/v1/payments/{uetr}/timeline"
+    - "GET /api/v1/payments/{uetr}/documents"
+```
+
+#### **Use Case 2: Business Analytics (UETR-Indexed)**
+```yaml
+uetr_analytics_capabilities:
+  corridor_performance: "Average delivery time by corridor (UETR-based)"
+  exception_analysis: "Failed payments analysis with UETR drill-down"
+  customer_insights: "Payment patterns by customer using UETR history"
+  regulatory_reporting: "Compliance metrics aggregated by UETR audit trail"
+  
+  kpi_calculations:
+    success_rate: "Completed UETRs / Total UETRs by corridor"
+    average_delivery_time: "Time difference between UETR generation and completion"
+    exception_rate: "UETRs requiring manual intervention / Total UETRs"
+    customer_satisfaction: "UETR-based delivery time vs. commitment"
+```
+
+#### **Use Case 3: MT/MX Message Mapping (UETR-Preserved)**
+```yaml
+uetr_message_mapping:
+  preservation_strategy: "UETR maintained across MT ↔ MX translations"
+  field_mapping:
+    mt103_uetr: "Field 20 (Sender's Reference)"
+    pacs008_uetr: "TxId (Transaction Identification)"
+    consistency_check: "UETR validation across format translations"
+  
+  migration_tracking:
+    dual_format_audit: "Both MT and MX versions linked by UETR"
+    transition_metrics: "UETR-based migration progress reporting"
+    rollback_capability: "UETR enables format rollback if needed"
 ```
 
 ## 🎯 Enhanced Target Benefits by Stage

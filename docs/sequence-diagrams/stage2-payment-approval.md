@@ -1,4 +1,4 @@
-# Stage 2: Payment Approval
+# Stage 2: Payment Approval + UETR Compliance Tracking
 ## Detailed Process Flow - Dual Approval and Enhanced Fraud Screening
 
 ```mermaid
@@ -11,68 +11,69 @@ sequenceDiagram
     participant DataLake as 🏛️ Data Lake (Silver)
     participant KafkaEvents as 📨 Kafka Events
 
-    Note over WorkflowEngine, KafkaEvents: 📋 STAGE 2: PAYMENT APPROVAL (Target: Fraud Screening & Accuracy)
+    Note over WorkflowEngine, KafkaEvents: 📋 STAGE 2: PAYMENT APPROVAL + UETR COMPLIANCE TRACKING
+    Note right of KafkaEvents: UETR enables real-time compliance audit trail
 
-    %% Process Step 1: Enhanced Risk Assessment
+    %% Process Step 1: Enhanced Risk Assessment with UETR
     activate WorkflowEngine
-    WorkflowEngine->>ComplianceEngine: Enhanced Risk Assessment Request
+    WorkflowEngine->>ComplianceEngine: Enhanced Risk Assessment Request (UETR included)
     activate ComplianceEngine
-    ComplianceEngine->>ComplianceEngine: Deep AML/KYC Analysis
-    Note right of ComplianceEngine: • Transaction Pattern Analysis<br/>• Beneficiary Risk Scoring<br/>• Geographic Risk Assessment<br/>• Currency Risk Evaluation
+    ComplianceEngine->>ComplianceEngine: Deep AML/KYC Analysis (UETR audit trail)
+    Note right of ComplianceEngine: UETR Compliance Tracking:<br/>• Transaction Pattern Analysis<br/>• Beneficiary Risk Scoring<br/>• Geographic Risk Assessment<br/>• Currency Risk Evaluation
 
-    %% Process Step 2: Fraud Detection Analysis
-    ComplianceEngine->>FraudDetection: ML-Based Fraud Screening
+    %% Process Step 2: Fraud Detection Analysis with UETR
+    ComplianceEngine->>FraudDetection: ML-Based Fraud Screening (UETR context)
     activate FraudDetection
-    FraudDetection->>FraudDetection: Real-time ML Model Analysis
-    Note right of FraudDetection: • Velocity Checks<br/>• Behavioral Analysis<br/>• Device Fingerprinting<br/>• Transaction Clustering
+    FraudDetection->>FraudDetection: Real-time ML Model Analysis (UETR-based)
+    Note right of FraudDetection: UETR ML Features:<br/>• Velocity Checks (UETR history)<br/>• Behavioral Analysis<br/>• Device Fingerprinting<br/>• Transaction Clustering
 
-    %% Process Step 3: Risk Score Calculation
-    FraudDetection->>FraudDetection: Calculate Composite Risk Score
-    FraudDetection-->>ComplianceEngine: Risk Score + Recommendations
-    Note left of FraudDetection: Risk Categories:<br/>• LOW (0-30): Auto-approve<br/>• MEDIUM (31-70): Manual review<br/>• HIGH (71-100): Block/investigate
+    %% Process Step 3: Risk Score Calculation with UETR
+    FraudDetection->>FraudDetection: Calculate Composite Risk Score (UETR indexed)
+    FraudDetection-->>ComplianceEngine: Risk Score + Recommendations (UETR tracked)
+    Note left of FraudDetection: UETR Risk Categories:<br/>• LOW (0-30): Auto-approve<br/>• MEDIUM (31-70): Manual review<br/>• HIGH (71-100): Block/investigate
     deactivate FraudDetection
 
-    %% Process Step 4: Compliance Decision
-    ComplianceEngine->>ComplianceEngine: Final Compliance Assessment
-    ComplianceEngine-->>WorkflowEngine: Compliance Decision + Risk Score
+    %% Process Step 4: Compliance Decision with UETR
+    ComplianceEngine->>ComplianceEngine: Final Compliance Assessment (UETR logged)
+    ComplianceEngine-->>WorkflowEngine: Compliance Decision + Risk Score (UETR audit)
     deactivate ComplianceEngine
-    Note right of WorkflowEngine: ✅ TARGET ACHIEVED:<br/>Enhanced Fraud Screening
+    Note right of WorkflowEngine: ✅ UETR COMPLIANCE TARGET:<br/>Complete audit trail for regulatory reporting
 
-    %% Process Step 5: Dual Approval Logic
-    alt Risk Score: LOW (Auto-approve)
-        WorkflowEngine->>WorkflowEngine: Auto-approve (Single Authorization)
-        Note right of WorkflowEngine: Low-risk transactions<br/>bypass manual approval
-    else Risk Score: MEDIUM/HIGH (Manual Approval)
-        WorkflowEngine->>ApprovalService: Request Dual Approval
+    %% Process Step 5: Dual Approval Logic with UETR
+    alt Risk Score: LOW (Auto-approve with UETR)
+        WorkflowEngine->>WorkflowEngine: Auto-approve (UETR compliance logged)
+        Note right of WorkflowEngine: UETR tracks low-risk<br/>auto-approval decision
+    else Risk Score: MEDIUM/HIGH (Manual Approval with UETR)
+        WorkflowEngine->>ApprovalService: Request Dual Approval (UETR reference)
         activate ApprovalService
-        ApprovalService->>NotificationSvc: Send Approval Request to Makers
+        ApprovalService->>NotificationSvc: Send Approval Request (UETR tracking)
         activate NotificationSvc
-        NotificationSvc-->>ApprovalService: Approval Notifications Sent
+        NotificationSvc-->>ApprovalService: Approval Notifications Sent (UETR logged)
 
-        %% First Approval
-        ApprovalService->>ApprovalService: Wait for Maker Approval #1
-        Note right of ApprovalService: First Approver Decision
-        ApprovalService->>ApprovalService: Wait for Maker Approval #2
-        Note right of ApprovalService: Second Approver Decision
+        %% First Approval with UETR
+        ApprovalService->>ApprovalService: Wait for Maker Approval #1 (UETR tracked)
+        Note right of ApprovalService: UETR logs first approver decision
+        ApprovalService->>ApprovalService: Wait for Maker Approval #2 (UETR tracked)
+        Note right of ApprovalService: UETR logs second approver decision
 
-        %% Final Approval Decision
-        ApprovalService->>ApprovalService: Validate Dual Approval Rules
-        ApprovalService-->>WorkflowEngine: Dual Approval Decision
+        %% Final Approval Decision with UETR
+        ApprovalService->>ApprovalService: Validate Dual Approval Rules (UETR audit)
+        ApprovalService-->>WorkflowEngine: Dual Approval Decision (UETR completed)
         deactivate ApprovalService
         deactivate NotificationSvc
     end
 
-    %% Process Step 6: Data Enrichment (Silver Layer)
-    WorkflowEngine->>KafkaEvents: Publish Payment.Approved/Rejected Event
-    KafkaEvents->>DataLake: Store Enriched Data (Silver Layer)
-    Note right of DataLake: Silver: Enriched & validated<br/>• Risk scores<br/>• Approval decisions<br/>• Compliance metadata
+    %% Process Step 6: Data Enrichment with UETR (Silver Layer)
+    WorkflowEngine->>KafkaEvents: Publish Payment.Approved/Rejected Event (UETR key)
+    KafkaEvents->>DataLake: Store Enriched Data (UETR-indexed Silver Layer)
+    Note right of DataLake: UETR Silver Data:<br/>• Risk scores by UETR<br/>• Approval decisions<br/>• Compliance metadata<br/>• Real-time audit trail
 
-    %% Process Step 7: Status Update
-    WorkflowEngine->>WorkflowEngine: Update Payment Status
-    Note right of WorkflowEngine: Status Options:<br/>• APPROVED: Ready for execution<br/>• REJECTED: Send notification<br/>• PENDING: Awaiting approval
+    %% Process Step 7: Status Update with UETR
+    WorkflowEngine->>WorkflowEngine: Update Payment Status (UETR tracking)
+    Note right of WorkflowEngine: UETR Status Options:<br/>• APPROVED: Ready for execution<br/>• REJECTED: Send notification<br/>• PENDING: Awaiting approval
     deactivate WorkflowEngine
 
-    Note over WorkflowEngine, KafkaEvents: 📊 SILVER DATA CAPTURED: Enriched compliance and approval data
+    Note over WorkflowEngine, KafkaEvents: 📊 UETR SILVER DATA: Complete compliance audit trail captured
 
 ```
 

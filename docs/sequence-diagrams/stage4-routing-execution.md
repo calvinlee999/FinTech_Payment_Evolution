@@ -1,4 +1,4 @@
-# Stage 4: Routing & Execution
+# Stage 4: Routing & Execution + UETR gpi Tracking
 ## Detailed Process Flow - Multi-hop Routing and Real-time Status Tracking
 
 ```mermaid
@@ -12,31 +12,32 @@ sequenceDiagram
     participant KafkaEvents as 📨 Kafka Events
     participant StatusService as 📊 Status Tracking Service
 
-    Note over SWIFTNetwork, StatusService: 🔗 STAGE 4: ROUTING & EXECUTION (Target: Traceability & Status Updates)
+    Note over SWIFTNetwork, StatusService: 🔗 STAGE 4: ROUTING & EXECUTION + UETR GPI TRACKING
+    Note right of StatusService: UETR enables real-time payment journey tracking
 
-    %% Process Step 1: Network Routing
+    %% Process Step 1: Network Routing with UETR
     activate SWIFTNetwork
-    SWIFTNetwork->>SWIFTNetwork: Analyze Routing Path
-    Note right of SWIFTNetwork: Routing Analysis:<br/>• Correspondent relationships<br/>• Cost optimization<br/>• Speed vs. cost trade-off<br/>• Regulatory compliance path
+    SWIFTNetwork->>SWIFTNetwork: Analyze Routing Path (UETR-based)
+    Note right of SWIFTNetwork: UETR Routing Analysis:<br/>• Correspondent relationships<br/>• Cost optimization<br/>• Speed vs. cost trade-off<br/>• Regulatory compliance path<br/>• UETR tracking compatibility
 
-    %% Process Step 2: First Hop - Correspondent A
-    SWIFTNetwork->>CorrespondentA: Route to Correspondent Bank A
+    %% Process Step 2: First Hop - Correspondent A with UETR
+    SWIFTNetwork->>CorrespondentA: Route to Correspondent Bank A (UETR included)
     activate CorrespondentA
-    CorrespondentA->>CorrespondentA: Process & Validate Message
-    Note right of CorrespondentA: Processing Steps:<br/>• Account validation<br/>• Sanctions screening<br/>• Balance verification<br/>• Fee deduction
+    CorrespondentA->>CorrespondentA: Process & Validate Message (UETR preserved)
+    Note right of CorrespondentA: UETR Processing Steps:<br/>• Account validation<br/>• Sanctions screening<br/>• Balance verification<br/>• Fee deduction<br/>• UETR audit trail
 
-    %% Process Step 3: gpi Status Update #1
-    CorrespondentA->>gpiTracker: Update gpi Status (In Transit)
+    %% Process Step 3: gpi Status Update #1 with UETR
+    CorrespondentA->>gpiTracker: Update gpi Status (UETR: In Transit)
     activate gpiTracker
-    gpiTracker->>StatusService: Real-time Status Update
+    gpiTracker->>StatusService: Real-time Status Update (UETR key)
     activate StatusService
-    StatusService->>KafkaEvents: Publish Status.Updated Event
-    KafkaEvents->>DataLake: Store Status Data (Gold Layer)
-    Note right of DataLake: ✅ TARGET ACHIEVED:<br/>Real-time Traceability
+    StatusService->>KafkaEvents: Publish Status.Updated Event (UETR indexed)
+    KafkaEvents->>DataLake: Store Status Data (UETR Gold Layer)
+    Note right of DataLake: ✅ UETR TARGET ACHIEVED:<br/>Real-time payment journey tracking
     deactivate StatusService
 
-    %% Process Step 4: Second Hop - Correspondent B
-    CorrespondentA->>CorrespondentB: Forward to Correspondent Bank B
+    %% Process Step 4: Second Hop - Correspondent B with UETR
+    CorrespondentA->>CorrespondentB: Forward to Correspondent Bank B (UETR maintained)
     deactivate CorrespondentA
     activate CorrespondentB
     CorrespondentB->>CorrespondentB: Intermediate Processing

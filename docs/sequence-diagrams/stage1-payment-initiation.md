@@ -1,5 +1,5 @@
-# Stage 1: Payment Initiation
-## Detailed Process Flow - Payment Initiation and Initial Validation
+# Stage 1: Payment Initiation with UETR Generation
+## Detailed Process Flow - Payment Initiation with UETR-Based Tracking Foundation
 
 ```mermaid
 sequenceDiagram
@@ -12,7 +12,7 @@ sequenceDiagram
     participant DataLake as 🏛️ Data Lake (Bronze)
     participant KafkaEvents as 📨 Kafka Events
 
-    Note over Customer, KafkaEvents: 🚀 STAGE 1: PAYMENT INITIATION (Target: Transparency & Risk Assessment)
+    Note over Customer, KafkaEvents: 🚀 STAGE 1: PAYMENT INITIATION + UETR GENERATION (Target: Transparency & UETR-Based Tracking)
 
     %% Process Step 1: Corporate User Login
     Customer->>Portal: Corporate User Login (OAuth 2.0)
@@ -28,26 +28,26 @@ sequenceDiagram
     API->>PaymentInitSvc: Create Payment Instruction
     activate PaymentInitSvc
 
-    %% Process Step 3: UETR Generation
-    PaymentInitSvc->>PaymentInitSvc: Generate UETR (Unique End-to-End Transaction Reference)
-    Note right of PaymentInitSvc: ISO 20022 Compliant UETR<br/>Format: {BIC}{YYYYMMDD}{Random}
+    %% Process Step 3: UETR Generation (Universal End-to-End Transaction Reference)
+    PaymentInitSvc->>PaymentInitSvc: Generate UETR - Universal Payment Tracking ID
+    Note right of PaymentInitSvc: 🔍 UETR GENERATION:<br/>• ISO 20022 Compliant UETR<br/>• Format: {BIC}{YYYYMMDD}{Random}<br/>• Universal Identifier for Payment Journey<br/>• Enables Real-Time End-to-End Tracking
 
-    %% Process Step 4: Fee Transparency
+    %% Process Step 4: Fee Transparency with UETR Reference
     PaymentInitSvc->>PaymentInitSvc: Calculate Total Fees & FX Rates
-    PaymentInitSvc-->>API: Fee Breakdown + Total Amount
-    API-->>Portal: Display Fee Transparency
-    Portal-->>Customer: Show Total Cost & Delivery Time
-    Note left of Customer: ✅ TARGET ACHIEVED:<br/>Fee Transparency
+    PaymentInitSvc-->>API: Fee Breakdown + Total Amount + UETR Reference
+    API-->>Portal: Display Fee Transparency + UETR
+    Portal-->>Customer: Show Total Cost + Delivery Time + UETR for Tracking
+    Note left of Customer: ✅ TARGET ACHIEVED:<br/>Fee Transparency<br/>🔍 UETR Provided for Real-Time Tracking
 
-    %% Process Step 5: Workflow Initiation
-    PaymentInitSvc->>WorkflowEngine: Initiate Payment Workflow (BPMN 2.0)
+    %% Process Step 5: Workflow Initiation with UETR
+    PaymentInitSvc->>WorkflowEngine: Initiate Payment Workflow (BPMN 2.0) + UETR
     activate WorkflowEngine
-    WorkflowEngine->>ComplianceEngine: Trigger Initial Risk Assessment
+    WorkflowEngine->>ComplianceEngine: Trigger Initial Risk Assessment (with UETR)
     activate ComplianceEngine
 
-    %% Process Step 6: Initial Compliance Check
-    ComplianceEngine->>ComplianceEngine: AML/KYC Initial Screening
-    Note right of ComplianceEngine: • Sanctions List Check<br/>• PEP (Politically Exposed Person)<br/>• High-Risk Country Check
+    %% Process Step 6: Initial Compliance Check with UETR Audit Trail
+    ComplianceEngine->>ComplianceEngine: AML/KYC Initial Screening (UETR-tracked)
+    Note right of ComplianceEngine: • Sanctions List Check (UETR logged)<br/>• PEP (Politically Exposed Person)<br/>• High-Risk Country Check<br/>🔍 UETR: Compliance Audit Trail Started
     ComplianceEngine->>ComplianceEngine: Calculate Risk Score
     ComplianceEngine-->>WorkflowEngine: Risk Assessment Result
 
